@@ -6,11 +6,12 @@ import morgan from 'morgan'
 import cors from 'cors'
 import path from 'path'
 import mongoose from 'mongoose'
+import router from './routes'
 
 //conecion a la base de datos mongoDB
-mongoose.Promise = global.Promise
-const bdUrl= 'mongodb://localhost:27017/dbsistema' //cuando creemos los modelos y empecemos a mandar datos, se forma automaticamente esta base de datos
-mongoose.connect(bdUrl, { useNewUrlParser: true})  //useCreateIndex: true, eso lo saque de adentro porque me decia q no era compatible
+mongoose.Promise = global.Promise;
+const dbUrl= 'mongodb://127.0.0.1:27017/dbsistema'; //cuando creemos los modelos y empecemos a mandar datos, se forma automaticamente esta base de datos
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology:true})  //useCreateIndex: true, eso lo saque de adentro porque me decia q no era compatible
 .then(mongoose => console.log('conectando a la base de datos en el puerto 27017'))
 .catch(err => console.log(err))
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname, 'public'))) //dirname es de js y nos muestra el directorio en el que estamos. dos guiones bajos
 //este path.join nos va a mostrar el directorio independientemente del sistema operativo.
 
+app.use('/api', router) //esto quiere decir que cuando entre a la url/api quien va a gestionar eso va a ser index.js de la carpeta routes (ahi esta el objeto router)
 
 //ahora abajo uso el metodo listen() de express que es el metodo de escucha
 // app.listen(3000,()=> { vamos a cambiar esto para que sea un puerto asignado por el servicio, servidor y no uno fijo:
